@@ -2,437 +2,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#343c26">
-<title>NoirBitcoin | Bitcoin Investment & Trading</title>
-<style>
-:root{--olive:#343c26;--panel:#293120;--cream:#f0e7cd;--muted:#b9bead;--line:#505943;--green:#a9cf8b;--red:#e9a19a}
-*{box-sizing:border-box}
-body{margin:0;background:var(--olive);color:var(--cream);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-button,input,select{font:inherit}
-button{cursor:pointer}
-.container{max-width:1100px;margin:auto;padding:20px}
-header{display:flex;align-items:center;justify-content:space-between;padding:15px 0;border-bottom:1px solid var(--line)}
-.brand{font-size:22px;font-weight:900;letter-spacing:1px}
-.brand span{color:white}
-h1{font-size:clamp(36px,7vw,58px);line-height:1.1}
-h2{font-size:21px}
-p{color:#d0d1c5;line-height:1.6}
-.eyebrow{color:var(--green);font-size:12px;font-weight:800;letter-spacing:2px}
-.hero{padding:45px 0;max-width:720px}
-.btn{padding:11px 16px;border:1px solid var(--line);border-radius:10px;background:#485239;color:var(--cream)}
-.primary{background:var(--cream);color:#20251a;font-weight:700;border-color:var(--cream)}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin:20px 0}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;min-width:0}
-.balance-card{background:var(--cream);color:#20251a}
-.balance-card p,.balance-card .muted{color:#535846}
-.balance{font-size:clamp(29px,6vw,42px);font-weight:800;margin:12px 0;overflow-wrap:anywhere}
-.muted{color:var(--muted);font-size:13px}
-input,select{width:100%;padding:13px;border:1px solid var(--line);border-radius:9px;background:#20261a;color:var(--cream);margin:7px 0 14px}
-label{display:block;font-size:13px;margin-top:10px}
-.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px}
-.nav{display:flex;gap:8px;overflow-x:auto;padding:15px 0}
-.nav button{white-space:nowrap}
-.hidden{display:none!important}
-.asset{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
-.coin{width:43px;height:43px;flex-shrink:0;display:grid;place-items:center;border-radius:50%;background:var(--cream);color:#20251a;font-weight:900}
-.asset-info{flex:1;min-width:0}
-.asset-info p{font-size:12px;margin:4px 0}
-.price{text-align:right;overflow-wrap:anywhere}
-.positive{color:var(--green)}
-.negative{color:var(--red)}
-.status{padding:10px;background:#20261a;border-radius:9px;font-size:13px;overflow-wrap:anywhere}
-.notice{font-size:12px;border-left:3px solid var(--green);padding-left:10px}
-.auth{max-width:440px;margin:40px auto}
-.chart{height:220px;width:100%}
-canvas{width:100%;height:100%}
-footer{margin-top:35px;padding:20px 0;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
-@media(max-width:650px){.container{padding:14px}.grid{grid-template-columns:1fr}.hero{padding:32px 0}.card{padding:16px}.brand{font-size:18px}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#252b1d">
+  <title>NoirBitcoin | Crypto Dashboard</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container">
-<header>
-  <div class="brand">NOIR<span>BITCOIN</span></div>
-  <button class="btn" id="authHeader" onclick="showAuth()">Sign in</button>
-</header>
+  <aside class="sidebar" id="sidebar">
+    <a href="#" class="brand">NOIR<span>BITCOIN</span></a>
 
-<section id="landing">
-  <div class="hero">
-    <div class="eyebrow">YOUR DIGITAL ASSETS, YOUR CONTROL</div>
-    <h1>Invest with clarity.<br>Trade with confidence.</h1>
-    <p>Discover Bitcoin, explore cryptocurrency markets, calculate investment scenarios, and monitor your portfolio in one place.</p>
-    <div class="actions">
-      <button class="btn primary" onclick="showAuth('signup')">Get started</button>
-      <button class="btn" onclick="showAuth('signin')">Sign in</button>
+    <nav>
+      <button class="nav-item active" data-page="overview">Overview</button>
+      <button class="nav-item" data-page="markets">Markets</button>
+      <button class="nav-item" data-page="portfolio">Portfolio</button>
+      <button class="nav-item" data-page="trade">Trade</button>
+      <button class="nav-item" data-page="transactions">Transactions</button>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <span class="status-dot"></span>
+      <span>Market data</span>
     </div>
-  </div>
-  <div class="grid">
-    <div class="card"><h2>Bitcoin markets</h2><p>Explore cryptocurrency prices and market trends.</p></div>
-    <div class="card"><h2>Investment tools</h2><p>Calculate hypothetical returns without guaranteed profits.</p></div>
-    <div class="card"><h2>Trading dashboard</h2><p>Practice buying and selling using simulated funds.</p></div>
-    <div class="card"><h2>Portfolio tracking</h2><p>Review demo balances and transaction history.</p></div>
-  </div>
-</section>
+  </aside>
 
-<section id="auth" class="auth hidden">
-  <div class="card">
-    <div class="eyebrow">NOIRBITCOIN ACCOUNT</div>
-    <h2 id="authTitle">Create your demo account</h2>
-    <p id="authDescription">Start exploring NoirBitcoin.</p>
-    <form id="authForm">
-      <label for="email">Email address</label>
-      <input id="email" type="email" autocomplete="email" required placeholder="you@example.com">
-      <label for="password">Password</label>
-      <input id="password" type="password" minlength="8" required autocomplete="new-password" placeholder="At least 8 characters">
-      <button class="btn primary" id="authSubmit" style="width:100%">Create demo account</button>
-    </form>
-    <p id="authMessage" class="status hidden"></p>
-    <button class="btn" onclick="toggleAuthMode()" id="authToggle">Already registered? Sign in</button>
-    <button class="btn" onclick="showLanding()">Back</button>
-    <p class="notice">Demo authentication only. Do not use a real password. Production accounts require secure server-side authentication.</p>
-  </div>
-</section>
+  <main class="main">
+    <header class="topbar">
+      <button class="menu-button" id="menuButton" aria-label="Toggle menu">☰</button>
+      <div>
+        <p class="eyebrow">DIGITAL ASSET PLATFORM</p>
+        <h1 id="pageTitle">Overview</h1>
+      </div>
+      <div class="profile">NB</div>
+    </header>
 
-<section id="dashboard" class="hidden">
-  <div class="nav">
-    <button class="btn" onclick="showTab('overview')">Overview</button>
-    <button class="btn" onclick="showTab('invest')">Invest</button>
-    <button class="btn" onclick="showTab('trade')">Trade</button>
-    <button class="btn" onclick="showTab('history')">History</button>
-    <button class="btn" onclick="logout()">Sign out</button>
-  </div>
+    <div class="notice">
+      Market data is informational. Trading is unavailable until a real
+      exchange account and secure backend are connected.
+    </div>
 
-  <div id="overview">
-    <div class="eyebrow">YOUR DASHBOARD</div>
-    <h1 style="font-size:35px">Welcome to NoirBitcoin</h1>
-    <p>Account: <span id="userEmail"></span></p>
-    <div class="status">DEMO MODE — simulated funds only; no real deposits or trades.</div>
-    <div class="grid">
-      <div class="card balance-card">
-        <div class="muted">Simulated portfolio balance</div>
-        <div class="balance" id="balance">$350,000.00</div>
-        <div class="muted">NOT REAL OR WITHDRAWABLE MONEY</div>
-        <div class="actions">
-          <button class="btn primary" onclick="showTab('invest')">Invest demo funds</button>
-          <button class="btn" onclick="showTab('trade')">Trade demo</button>
+    <section class="stats-grid">
+      <article class="card">
+        <p class="muted">Portfolio value</p>
+        <h2 id="portfolioValue">—</h2>
+        <p class="muted">Calculated from connected holdings</p>
+      </article>
+
+      <article class="card">
+        <p class="muted">Bitcoin price</p>
+        <h2 id="btcPrice">Loading…</h2>
+        <p id="btcChange" class="muted">Fetching market data</p>
+      </article>
+
+      <article class="card">
+        <p class="muted">Ethereum price</p>
+        <h2 id="ethPrice">Loading…</h2>
+        <p class="muted">ETH / USD</p>
+      </article>
+    </section>
+
+    <section class="card market-card">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">MARKET WATCH</p>
+          <h2>Cryptocurrency markets</h2>
         </div>
+        <button class="button" id="refreshMarkets">Refresh</button>
       </div>
-      <div class="card">
-        <h2>Bitcoin market</h2>
-        <div class="muted">BTC / USD</div>
-        <div class="balance" style="font-size:30px" id="btcPrice">Loading...</div>
-        <div id="btcChange" class="muted">Loading market data...</div>
-        <p id="marketStatus" class="muted">Waiting for market data.</p>
-        <button class="btn" onclick="loadBitcoin()">Refresh price</button>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Asset</th>
+              <th>Symbol</th>
+              <th>Price (USD)</th>
+              <th>24h change</th>
+            </tr>
+          </thead>
+          <tbody id="marketTable">
+            <tr><td colspan="4">Loading market prices…</td></tr>
+          </tbody>
+        </table>
       </div>
-    </div>
+      <p id="marketMessage" class="muted"></p>
+    </section>
 
-    <div class="card">
-      <h2>Search cryptocurrency</h2>
-      <input id="search" placeholder="Search Bitcoin, Ethereum..." oninput="searchAssets()">
-      <div id="assetList">
-        <div class="asset"><div class="coin">₿</div><div class="asset-info"><b>Bitcoin</b><p>BTC</p></div><div class="price" id="listBtc">Loading...</div></div>
-        <div class="asset"><div class="coin">Ξ</div><div class="asset-info"><b>Ethereum</b><p>ETH</p></div><div class="price" id="listEth">Loading...</div></div>
-      </div>
-    </div>
+    <section class="card market-card">
+      <p class="eyebrow">ACCOUNT</p>
+      <h2>Connect your portfolio</h2>
+      <p class="muted">
+        Your actual holdings and balance will appear after secure account
+        authentication and exchange integration are configured.
+      </p>
+      <button class="button" id="connectInfo">Integration status</button>
+      <p id="integrationMessage" class="muted"></p>
+    </section>
 
-    <div class="card" style="margin-top:16px">
-      <h2>Bitcoin chart</h2>
-      <p class="muted">Illustrative chart, not live historical prices.</p>
-      <div class="chart"><canvas id="chart"></canvas></div>
-    </div>
-  </div>
+    <footer>NoirBitcoin · Market information only</footer>
+  </main>
 
-  <div id="invest" class="hidden">
-    <h1 style="font-size:35px">Investment calculator</h1>
-    <div class="card">
-      <p>Calculate hypothetical outcomes. Returns are not guaranteed, and Bitcoin can lose value.</p>
-      <label for="investAmount">Investment amount (USD)</label>
-      <input type="number" id="investAmount" min="1" max="350000" value="1000">
-      <label for="investRate">Hypothetical return per period</label>
-      <select id="investRate">
-        <option value="-20">-20% scenario</option>
-        <option value="-5">-5% scenario</option>
-        <option value="0">0% scenario</option>
-        <option value="5" selected>5% scenario</option>
-        <option value="10">10% scenario</option>
-      </select>
-      <label for="investPeriod">Number of periods</label>
-      <select id="investPeriod">
-        <option value="1">1 period</option>
-        <option value="3">3 periods</option>
-        <option value="6">6 periods</option>
-        <option value="12">12 periods</option>
-      </select>
-      <button class="btn primary" onclick="calculateInvestment()">Calculate scenario</button>
-      <div class="card" style="margin-top:15px">
-        <div class="muted">Illustrative ending value</div>
-        <div class="balance" id="investResult">$1,050.00</div>
-        <p id="investProfit">Illustrative change: $50.00</p>
-      </div>
-      <button class="btn primary" onclick="createDemoInvestment()">Record demo investment</button>
-      <p class="notice">Demo investments are records only. They do not earn real returns or transfer funds to an investment provider.</p>
-    </div>
-    <h2 style="margin-top:20px">My demo investments</h2>
-    <div id="investmentList" class="card">No demo investments recorded.</div>
-  </div>
-
-  <div id="trade" class="hidden">
-    <h1 style="font-size:35px">Trading terminal</h1>
-    <div class="card">
-      <div class="status">SIMULATION MODE — no real orders will be sent.</div>
-      <label for="tradeAsset">Asset</label>
-      <select id="tradeAsset">
-        <option value="bitcoin">Bitcoin (BTC)</option>
-        <option value="ethereum">Ethereum (ETH)</option>
-      </select>
-      <label for="tradeType">Order side</label>
-      <select id="tradeType">
-        <option value="buy">Buy</option>
-        <option value="sell">Sell</option>
-      </select>
-      <label for="tradeAmount">Order value (USD)</label>
-      <input type="number" id="tradeAmount" min="1" value="100">
-      <p id="tradeQuote">Waiting for market price...</p>
-      <button class="btn primary" onclick="placeDemoOrder()">Place demo order</button>
-    </div>
-    <div class="card" style="margin-top:16px">
-      <h2>Demo holdings</h2>
-      <div id="holdings">No crypto purchased in demo mode.</div>
-    </div>
-  </div>
-
-  <div id="history" class="hidden">
-    <h1 style="font-size:35px">Transaction history</h1>
-    <div class="card"><div id="historyList">No transactions yet.</div></div>
-  </div>
-</section>
-
-<footer>
-  <b>NOIRBITCOIN</b> · Digital asset exploration platform.<br><br>
-  Demo balances and trades are simulated and have no monetary value. Market data may be delayed or unavailable. This demo is not an investment adviser, exchange, or custodian.
-</footer>
-</div>
-
-<script>
-"use strict";
-const $=id=>document.getElementById(id);
-const money=n=>new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"}).format(n);
-
-const state={
-  user:null,balance:350000,
-  prices:{bitcoin:null,ethereum:null},
-  holdings:{bitcoin:0,ethereum:0},
-  history:[],investments:[],authMode:"signup"
-};
-
-function showLanding(){
-  $("landing").classList.remove("hidden");
-  $("auth").classList.add("hidden");
-  $("dashboard").classList.add("hidden");
-}
-function showAuth(mode="signin"){
-  state.authMode=mode;
-  $("landing").classList.add("hidden");
-  $("dashboard").classList.add("hidden");
-  $("auth").classList.remove("hidden");
-  updateAuthUI();
-}
-function updateAuthUI(){
-  const signup=state.authMode==="signup";
-  $("authTitle").textContent=signup?"Create your demo account":"Sign in";
-  $("authDescription").textContent=signup?"Create a local demo profile.":"Access your local demo profile.";
-  $("authSubmit").textContent=signup?"Create demo account":"Sign in";
-  $("authToggle").textContent=signup?"Already registered? Sign in":"Need a demo account? Sign up";
-  $("password").autocomplete=signup?"new-password":"current-password";
-}
-function toggleAuthMode(){
-  state.authMode=state.authMode==="signup"?"signin":"signup";
-  $("authMessage").classList.add("hidden");
-  updateAuthUI();
-}
-$("authForm").addEventListener("submit",async e=>{
-  e.preventDefault();
-  const email=$("email").value.trim().toLowerCase();
-  const password=$("password").value;
-  const key="noirbitcoin_demo_"+email;
-  let stored;
-  try{stored=JSON.parse(localStorage.getItem(key)||"null")}catch{stored=null}
-
-  if(state.authMode==="signup"){
-    if(stored){showAuthMessage("Demo account already exists. Please sign in.");return}
-    // Demo only: never store passwords this way in a production app.
-    localStorage.setItem(key,JSON.stringify({email,password}));
-  }else if(!stored||stored.password!==password){
-    showAuthMessage("Incorrect demo credentials or account not found.");
-    return;
-  }
-
-  state.user=email;
-  loadUserData();
-  $("auth").classList.add("hidden");
-  $("dashboard").classList.remove("hidden");
-  $("authHeader").textContent="Demo account";
-  $("userEmail").textContent=email;
-  drawChart();
-  await loadBitcoin();
-  updateUI();
-});
-function showAuthMessage(message){
-  $("authMessage").textContent=message;
-  $("authMessage").classList.remove("hidden");
-}
-function loadUserData(){
-  try{
-    const s=JSON.parse(localStorage.getItem("noirbitcoin_data_"+state.user)||"null");
-    state.balance=s?.balance??350000;
-    state.holdings=s?.holdings??{bitcoin:0,ethereum:0};
-    state.history=s?.history??[];
-    state.investments=s?.investments??[];
-  }catch{
-    state.balance=350000;
-    state.holdings={bitcoin:0,ethereum:0};
-    state.history=[];
-    state.investments=[];
-  }
-}
-function saveUserData(){
-  if(!state.user)return;
-  localStorage.setItem("noirbitcoin_data_"+state.user,JSON.stringify({
-    balance:state.balance,holdings:state.holdings,
-    history:state.history,investments:state.investments
-  }));
-}
-function logout(){
-  state.user=null;
-  $("authHeader").textContent="Sign in";
-  $("email").value="";
-  $("password").value="";
-  showLanding();
-}
-function showTab(tab){
-  ["overview","invest","trade","history"].forEach(id=>{
-    $(id).classList.toggle("hidden",id!==tab);
-  });
-  updateUI();
-}
-async function loadBitcoin(){
-  $("marketStatus").textContent="Fetching public market data...";
-  try{
-    const response=await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd&include_24hr_change=true");
-    if(!response.ok)throw new Error("Market provider unavailable");
-    const data=await response.json();
-    state.prices.bitcoin=data.bitcoin?.usd??null;
-    state.prices.ethereum=data.ethereum?.usd??null;
-    $("btcPrice").textContent=state.prices.bitcoin?money(state.prices.bitcoin):"Unavailable";
-    const change=data.bitcoin?.usd_24h_change;
-    $("btcChange").textContent=Number.isFinite(change)?change.toFixed(2)+"% over 24 hours":"Change unavailable";
-    $("btcChange").className=Number(change)>=0?"positive":"negative";
-    $("listBtc").textContent=state.prices.bitcoin?money(state.prices.bitcoin):"Unavailable";
-    $("listEth").textContent=state.prices.ethereum?money(state.prices.ethereum):"Unavailable";
-    $("marketStatus").textContent="Public market-data snapshot. Refresh for updates.";
-    updateUI();
-  }catch{
-    $("marketStatus").textContent="Live prices unavailable. Check your connection and retry.";
-    $("btcPrice").textContent="Unavailable";
-    $("listBtc").textContent="Unavailable";
-    $("listEth").textContent="Unavailable";
-    $("tradeQuote").textContent="No live quote. Demo orders are disabled until a price is available.";
-  }
-}
-function searchAssets(){
-  const q=$("search").value.toLowerCase();
-  document.querySelectorAll("#assetList .asset").forEach(row=>{
-    row.classList.toggle("hidden",!row.textContent.toLowerCase().includes(q));
-  });
-}
-function calculateInvestment(){
-  const amount=Number($("investAmount").value);
-  const rate=Number($("investRate").value)/100;
-  const periods=Number($("investPeriod").value);
-  if(!Number.isFinite(amount)||amount<=0||amount>350000){
-    alert("Enter an amount above zero and no more than $350,000.");
-    return;
-  }
-  const ending=amount*Math.pow(1+rate,periods);
-  $("investResult").textContent=money(ending);
-  $("investProfit").textContent="Illustrative change: "+money(ending-amount)+" over "+periods+" periods.";
-}
-function createDemoInvestment(){
-  if(!state.user){alert("Sign in first.");return}
-  const amount=Number($("investAmount").value);
-  if(!Number.isFinite(amount)||amount<=0||amount>state.balance){
-    alert("Enter a valid amount within your demo balance.");return;
-  }
-  state.balance-=amount;
-  state.investments.unshift({amount,date:new Date().toISOString(),status:"Demo record"});
-  state.history.unshift({type:"Demo investment allocation",amount:-amount,date:new Date().toISOString()});
-  saveUserData();updateUI();
-  alert("Demo investment recorded. No money was transferred and no return was earned.");
-}
-function placeDemoOrder(){
-  if(!state.user){alert("Sign in first.");return}
-  const asset=$("tradeAsset").value;
-  const type=$("tradeType").value;
-  const amount=Number($("tradeAmount").value);
-  const price=state.prices[asset];
-  if(!Number.isFinite(amount)||amount<=0||amount>state.balance){
-    alert("Enter a valid order amount within your demo balance.");return;
-  }
-  if(!Number.isFinite(price)||price<=0){
-    alert("A valid market price is required.");return;
-  }
-  const quantity=amount/price;
-  if(type==="buy"){
-    state.balance-=amount;
-    state.holdings[asset]+=quantity;
-  }else{
-    if(quantity>state.holdings[asset]){
-      alert("Insufficient demo holdings to sell this quantity.");return;
-    }
-    state.holdings[asset]-=quantity;
-    state.balance+=amount;
-  }
-  state.history.unshift({
-    type:"Demo "+type+" "+asset.toUpperCase(),
-    amount:type==="buy"?-amount:amount,quantity,price,
-    date:new Date().toISOString()
-  });
-  saveUserData();updateUI();
-  alert("Simulated order recorded. No real cryptocurrency was traded.");
-}
-function escapeHTML(value){
-  return String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-}
-function updateUI(){
-  if(!state.user)return;
-  $("balance").textContent=money(state.balance);
-  $("investmentList").innerHTML=state.investments.length?
-    state.investments.map(i=>`<div class="asset"><div class="asset-info"><b>Demo investment</b><p>${escapeHTML(new Date(i.date).toLocaleString())}</p></div><div class="price">${money(i.amount)}<p class="muted">${escapeHTML(i.status)}</p></div></div>`).join(""):"No demo investments recorded.";
-  $("holdings").innerHTML=["bitcoin","ethereum"].map(a=>
-    `<div class="asset"><div class="asset-info"><b>${a.toUpperCase()}</b><p>${state.holdings[a].toFixed(8)} units (demo)</p></div><div class="price">${money(state.holdings[a]*(state.prices[a]||0))}</div></div>`
-  ).join("");
-  $("historyList").innerHTML=state.history.length?
-    state.history.map(t=>`<div class="asset"><div class="asset-info"><b>${escapeHTML(t.type)}</b><p>${escapeHTML(new Date(t.date).toLocaleString())}</p></div><div class="price">${money(t.amount)}</div></div>`).join(""):"No transactions yet.";
-  $("tradeQuote").textContent="BTC: "+(state.prices.bitcoin?money(state.prices.bitcoin):"unavailable")+" · ETH: "+(state.prices.ethereum?money(state.prices.ethereum):"unavailable");
-}
-function drawChart(){
-  const canvas=$("chart"),ctx=canvas.getContext("2d");
-  const w=canvas.clientWidth||300,h=canvas.clientHeight||220,dpr=window.devicePixelRatio||1;
-  canvas.width=w*dpr;canvas.height=h*dpr;ctx.scale(dpr,dpr);
-  ctx.clearRect(0,0,w,h);
-  const points=Array.from({length:45},(_,i)=>h*.58-Math.sin(i*.24)*25-Math.sin(i*.72)*8-i*.8);
-  ctx.strokeStyle="#a9cf8b";ctx.lineWidth=2;ctx.beginPath();
-  points.forEach((y,i)=>{const x=i*w/(points.length-1);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});
-  ctx.stroke();ctx.fillStyle="#b9bead";ctx.font="11px sans-serif";
-  ctx.fillText("ILLUSTRATIVE CHART · NOT LIVE HISTORY",5,15);
-}
-window.addEventListener("resize",()=>{
-  if(!$("dashboard").classList.contains("hidden"))drawChart();
-});
-showLanding();
-</script>
+  <script src="app.js"></script>
 </body>
 </html>
